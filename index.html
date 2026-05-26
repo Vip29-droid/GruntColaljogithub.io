@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grunt Colaljo — IT Student</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy2: #0f1f3d;
+    --navy3: #162447;
+    --blue: #1f6feb;
+    --blue-light: #58a6ff;
+    --blue-glow: #388bfd33;
+    --accent: #4fc3f7;
+    --white: #e8f0fe;
+    --muted: #8b9cbf;
+    --card: #111d35;
+    --card2: #152040;
+    --border: #1e3057;
+    --green: #3fb950;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Grid bg */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.18;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 4rem;
+    background: rgba(10,22,40,0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--blue-light);
+    letter-spacing: 0.05em;
+  }
+  nav ul { list-style: none; display: flex; gap: 2.5rem; }
+  nav a {
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--blue-light); }
+
+  section { position: relative; z-index: 1; }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 4rem 4rem;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 2rem;
+  }
+  .badge span { width: 7px; height: 7px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+  h1 .name-first { color: var(--white); }
+  h1 .name-last { color: var(--blue-light); }
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 480px;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+  }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.8rem;
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { background: var(--blue-light); transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--white);
+    border: 1px solid var(--border);
+    padding: 0.75rem 1.8rem;
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--blue-light); color: var(--blue-light); }
+
+  /* SECTIONS */
+  .section-wrap { padding: 6rem 4rem; max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--blue-light);
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::after { content: ''; flex: 0 0 40px; height: 1px; background: var(--blue-light); opacity: 0.5; }
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 3rem;
+    letter-spacing: -0.01em;
+  }
+
+  /* ABOUT */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .about-text p { color: var(--muted); margin-bottom: 1.2rem; }
+  .about-text p strong { color: var(--white); }
+  .stats { display: flex; gap: 2rem; margin-top: 2rem; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--blue-light);
+    display: block;
+  }
+  .stat-label { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+  /* SKILLS */
+  .skill-item { margin-bottom: 1.4rem; }
+  .skill-header { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; }
+  .skill-name { font-family: 'DM Mono', monospace; color: var(--white); }
+  .skill-pct { color: var(--blue-light); font-weight: 500; }
+  .skill-bar { height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .skill-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--accent)); border-radius: 4px; transition: width 1s ease; }
+
+  /* PROJECTS */
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.8rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .project-card:hover { border-color: var(--blue); transform: translateY(-3px); }
+  .project-tag {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--blue-light);
+    border: 1px solid var(--blue);
+    border-radius: 4px;
+    padding: 3px 10px;
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+  .project-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    color: var(--white);
+  }
+  .project-subtitle { font-size: 0.82rem; color: var(--blue-light); margin-bottom: 0.8rem; }
+  .project-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.2rem; }
+  .tech-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tech-tag {
+    font-size: 0.75rem;
+    background: var(--navy3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 10px;
+    color: var(--muted);
+  }
+
+  /* EXPERIENCE */
+  .exp-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 700px;
+  }
+  .exp-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 8px; }
+  .exp-card h3 { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700; }
+  .exp-badge {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--blue-glow);
+    color: var(--blue-light);
+    border: 1px solid var(--blue);
+    border-radius: 4px;
+    padding: 4px 12px;
+  }
+  .exp-org { color: var(--blue-light); font-size: 0.88rem; margin-bottom: 0.8rem; }
+  .exp-desc { color: var(--muted); font-size: 0.9rem; }
+
+  /* CONTACT */
+  .contact-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2.5rem;
+    max-width: 560px;
+  }
+  .contact-card p { color: var(--muted); margin-bottom: 1.8rem; }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1rem;
+    font-size: 0.92rem;
+  }
+  .contact-icon {
+    width: 36px; height: 36px;
+    background: var(--navy3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.95rem;
+    color: var(--blue-light);
+    flex-shrink: 0;
+  }
+  .contact-text { color: var(--white); }
+  .contact-text a { color: var(--blue-light); text-decoration: none; }
+  .contact-text a:hover { text-decoration: underline; }
+
+  footer {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 2.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+  footer span { color: var(--blue-light); }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    nav ul { gap: 1.2rem; }
+    #hero { padding: 7rem 1.5rem 3rem; }
+    .section-wrap { padding: 4rem 1.5rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    h1 { font-size: 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">GC.dev</div>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div style="max-width:900px; padding-left:0;">
+    <div class="badge"><span></span> Available for Opportunities</div>
+    <h1>
+      <span class="name-first">GRUNT<br></span>
+      <span class="name-last">COLALJO</span>
+    </h1>
+    <p class="hero-sub">IT Student & Developer based in Davao del Norte. Building practical systems with clean logic and real-world impact.</p>
+    <div class="hero-btns">
+      <a href="#skills" class="btn-primary">View Skills</a>
+      <a href="#contact" class="btn-ghost">Contact Me</a>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="section-wrap">
+    <div class="section-label">01 — About</div>
+    <h2>Who I Am</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I'm a <strong>BS Information Technology student</strong> at Davao Del Norte State College (DNSC), currently building my skills in data management, programming, and computer systems.</p>
+        <p>I consider myself responsible, hardworking, and detail-oriented. I enjoy learning new tools and applying them to solve real-world problems.</p>
+        <p>My experience spans <strong>data encoding, Microsoft Office, and Java fundamentals</strong> — and I'm always looking to grow through hands-on work.</p>
+        <div class="stats">
+          <div><span class="stat-num">DNSC</span><span class="stat-label">School</span></div>
+          <div><span class="stat-num">1st</span><span class="stat-label">Year IT Student</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="section-label" style="margin-bottom:1.5rem;">Skills Overview</div>
+        <div class="skill-item">
+          <div class="skill-header"><span class="skill-name">Microsoft Office Suite</span><span class="skill-pct">90%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-header"><span class="skill-name">Data Encoding</span><span class="skill-pct">85%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-header"><span class="skill-name">Java Programming</span><span class="skill-pct">60%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:60%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-header"><span class="skill-name">HTML / CSS</span><span class="skill-pct">55%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:55%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-header"><span class="skill-name">Data Management</span><span class="skill-pct">75%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="section-wrap">
+    <div class="section-label">02 — Projects</div>
+    <h2>Things I've Built</h2>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-tag">Course Project</div>
+        <h3>Coming Soon</h3>
+        <p class="project-subtitle">Future Project</p>
+        <p class="project-desc">Currently developing my first major project. Check back soon — something is in the works!</p>
+        <div class="tech-tags">
+          <span class="tech-tag">Java</span>
+          <span class="tech-tag">HTML/CSS</span>
+        </div>
+      </div>
+      <div class="project-card" style="border-color: var(--blue); border-style: dashed; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; min-height:220px;">
+        <div style="font-size:2rem; margin-bottom:0.8rem; color:var(--border);">+</div>
+        <p style="color:var(--muted); font-size:0.88rem;">More projects coming as I grow my skills at DNSC</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="section-wrap">
+    <div class="section-label">03 — Experience</div>
+    <h2>Where I've Worked</h2>
+    <div class="exp-card">
+      <div class="exp-header">
+        <h3>Data Encoder</h3>
+        <span class="exp-badge">Internship / OJT</span>
+      </div>
+      <p class="exp-org">Government / Local Office — Davao del Norte</p>
+      <p class="exp-desc">Encoded, verified, and organized data for official records. Ensured accuracy and completeness of information across databases. Gained hands-on experience in data management, clerical tasks, and professional workflows.</p>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-wrap">
+    <div class="section-label">04 — Contact</div>
+    <h2>Get In Touch</h2>
+    <div class="contact-card">
+      <p>I'm open to internship opportunities, school collaborations, and freelance projects. Feel free to reach out — I'm happy to connect!</p>
+      <div class="contact-item">
+        <div class="contact-icon">✉</div>
+        <div class="contact-text"><a href="mailto:gruntwapo23@gmail.com">gruntwapo23@gmail.com</a></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📞</div>
+        <div class="contact-text">+63 968 416 7112</div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div class="contact-text">Davao del Norte, Philippines</div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🎓</div>
+        <div class="contact-text">Davao Del Norte State College (DNSC)</div>
+      </div>
+      <br>
+      <a href="mailto:gruntwapo23@gmail.com" class="btn-primary">Send a Message</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Designed & built by <span>Grunt Colaljo</span> · DNSC IT Student · 2026</p>
+</footer>
+
+</body>
+</html>
